@@ -31,10 +31,6 @@ python -m pip install -r requirements.txt
 python app.py
 ```
 
-## Usage
-
-Open `http://127.0.0.1:5000` in your browser to explore products and start shopping.
-
 ## Database
 
 SQLite automatically creates the database and stores products, orders, and order items.
