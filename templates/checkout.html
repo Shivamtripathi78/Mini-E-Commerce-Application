@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Checkout | ShopEase</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<header class="navbar">
+
+    <a href="/" class="logo">Shop<span>Ease.</span></a>
+
+    <nav>
+        <a href="{{ url_for('cart') }}">Back to Cart</a>
+    </nav>
+
+</header>
+
+
+<main class="container page-container">
+
+    <h1>Checkout</h1>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+
+        {% for category, message in messages %}
+
+            <div class="flash {{ category }}">
+                {{ message }}
+            </div>
+
+        {% endfor %}
+
+    {% endwith %}
+
+
+    <div class="checkout-layout">
+
+        <form method="POST" class="checkout-form">
+
+            <h2>Delivery Information</h2>
+
+            <label>Full Name</label>
+
+            <input
+                type="text"
+                name="name"
+                maxlength="100"
+                required
+                placeholder="Enter your full name"
+            >
+
+            <label>Email Address</label>
+
+            <input
+                type="email"
+                name="email"
+                maxlength="254"
+                required
+                placeholder="Enter your email"
+            >
+
+            <label>Delivery Address</label>
+
+            <textarea
+                name="address"
+                rows="4"
+                maxlength="500"
+                required
+                placeholder="Enter your complete address"
+            ></textarea>
+
+            <button type="submit" class="primary-btn full-btn">
+                Place Order
+            </button>
+
+        </form>
+
+
+        <div class="summary-card">
+
+            <h2>Your Order</h2>
+
+            {% for item in items %}
+
+            <div class="summary-row">
+
+                <span>
+                    {{ item.name }} × {{ item.quantity }}
+                </span>
+
+                <strong>
+                    ₹{{ "%.2f"|format(item.subtotal) }}
+                </strong>
+
+            </div>
+
+            {% endfor %}
+
+            <hr>
+
+            <div class="summary-row total-row">
+
+                <span>Total</span>
+
+                <strong>₹{{ "%.2f"|format(total) }}</strong>
+
+            </div>
+
+            <p class="payment-note">
+                Demo checkout only. No real payment is processed.
+            </p>
+
+        </div>
+
+    </div>
+
+</main>
+
+</body>
+</html>

@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Shopping Cart | ShopEase</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<header class="navbar">
+
+    <a href="/" class="logo">Shop<span>Ease.</span></a>
+
+    <nav>
+        <a href="/">Continue Shopping</a>
+        <a href="{{ url_for('order_history') }}">Orders</a>
+    </nav>
+
+</header>
+
+
+<main class="container page-container">
+
+    <h1>Shopping Cart</h1>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+
+        {% for category, message in messages %}
+
+            <div class="flash {{ category }}">
+                {{ message }}
+            </div>
+
+        {% endfor %}
+
+    {% endwith %}
+
+
+    {% if items %}
+
+    <div class="cart-layout">
+
+        <div class="cart-items">
+
+            {% for item in items %}
+
+            <div class="cart-item">
+
+                <img src="{{ item.image }}" alt="{{ item.name }}">
+
+                <div class="cart-details">
+
+                    <h3>{{ item.name }}</h3>
+
+                    <p>₹{{ "%.2f"|format(item.price) }}</p>
+
+                    <form method="POST"
+                          action="{{ url_for('update_cart', product_id=item.id) }}"
+                          class="quantity-form">
+
+                        <input
+                            type="number"
+                            name="quantity"
+                            value="{{ item.quantity }}"
+                            min="1"
+                            max="99"
+                            required
+                        >
+
+                        <button type="submit" class="secondary-btn">
+                            Update
+                        </button>
+
+                    </form>
+
+                    <form method="POST"
+                          action="{{ url_for('remove_from_cart', product_id=item.id) }}">
+
+                        <button type="submit" class="remove-btn">
+                            Remove
+                        </button>
+
+                    </form>
+
+                </div>
+
+                <strong>
+                    ₹{{ "%.2f"|format(item.subtotal) }}
+                </strong>
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+
+        <div class="summary-card">
+
+            <h2>Order Summary</h2>
+
+            <div class="summary-row">
+                <span>Subtotal</span>
+                <strong>₹{{ "%.2f"|format(total) }}</strong>
+            </div>
+
+            <div class="summary-row">
+                <span>Delivery</span>
+                <strong>Free</strong>
+            </div>
+
+            <hr>
+
+            <div class="summary-row total-row">
+                <span>Total</span>
+                <strong>₹{{ "%.2f"|format(total) }}</strong>
+            </div>
+
+            <a href="{{ url_for('checkout') }}" class="primary-btn full-btn">
+                Proceed to Checkout
+            </a>
+
+        </div>
+
+    </div>
+
+    {% else %}
+
+    <div class="empty-state">
+
+        <h2>Your cart is empty!</h2>
+
+        <p>Looks like you haven't added anything yet.</p>
+
+        <a href="/" class="primary-btn">Start Shopping</a>
+
+    </div>
+
+    {% endif %}
+
+</main>
+
+<footer>
+    <p>ShopEase © 2026</p>
+</footer>
+
+</body>
+</html>

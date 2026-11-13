@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Orders | ShopEase</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<header class="navbar">
+
+    <a href="/" class="logo">Shop<span>Ease.</span></a>
+
+    <nav>
+        <a href="/">Home</a>
+        <a href="{{ url_for('cart') }}">Cart</a>
+    </nav>
+
+</header>
+
+
+<main class="container page-container">
+
+    {% if success_order %}
+
+    <div class="success-card">
+
+        <div class="success-icon">✓</div>
+
+        <h1>Order Placed Successfully!</h1>
+
+        <p>Thank you, {{ success_order.customer_name }}.</p>
+
+        <p>Your order has been recorded successfully.</p>
+
+        <div class="order-number">
+            Order #{{ success_order.id }}
+        </div>
+
+        <h2>₹{{ "%.2f"|format(success_order.total) }}</h2>
+
+        <a href="{{ url_for('home') }}" class="primary-btn">
+            Continue Shopping
+        </a>
+
+        <a href="{{ url_for('order_history') }}" class="secondary-btn">
+            View Order History
+        </a>
+
+    </div>
+
+    {% else %}
+
+    <h1>Order History</h1>
+
+    <p class="muted">Your previously placed orders.</p>
+
+    {% if history %}
+
+    <div class="orders-list">
+
+        {% for order in history %}
+
+        <div class="order-card">
+
+            <div>
+                <h3>Order #{{ order.id }}</h3>
+                <p>{{ order.customer_name }}</p>
+                <span>{{ order.order_date }}</span>
+            </div>
+
+            <strong>
+                ₹{{ "%.2f"|format(order.total) }}
+            </strong>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+    {% else %}
+
+    <div class="empty-state">
+
+        <h2>No orders yet.</h2>
+
+        <p>Your placed orders will appear here.</p>
+
+        <a href="/" class="primary-btn">Start Shopping</a>
+
+    </div>
+
+    {% endif %}
+
+    {% endif %}
+
+</main>
+
+<footer>
+    <p>ShopEase © 2026</p>
+</footer>
+
+</body>
+</html>
